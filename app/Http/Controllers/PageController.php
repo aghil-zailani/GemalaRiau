@@ -61,6 +61,7 @@ class PageController extends Controller
         // 4. Ambil berita terbaru lainnya untuk section "Latest News"
         $latestNews = Article::with('categories')
                             ->where('status', 'published')
+                            ->whereNotIn('id', $excludeIds)
                             ->latest('published_at')
                             ->paginate(4); // Tampilkan 4 berita per halaman
 
@@ -133,11 +134,27 @@ class PageController extends Controller
     {
         $query = $request->input('q');
 
-        $posts = Article::search($query)
-            ->where('status', 'published')
+        $posts = Article::where('status', 'published')
+            ->search($query)
             ->latest('published_at')
             ->paginate(10);
 
         return view('search', compact('posts', 'query'));
+    }
+
+    /**
+     * Menyimpan email subscriber newsletter.
+     */
+    public function subscribe(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|unique:newsletter_subscriptions,email',
+        ]);
+
+        NewsletterSubscription::create([
+            'email' => $request->email,
+        ]);
+
+        return back()->with('success', 'Terima kasih telah berlangganan newsletter kami!');
     }
 }

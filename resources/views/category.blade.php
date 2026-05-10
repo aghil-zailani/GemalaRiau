@@ -18,10 +18,10 @@
                 @foreach($articles as $news)
                 <a href="{{ route('news.show', $news->slug) }}" class="block news-card">
                     <article class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
-                        <img src="{{ Storage::url($mainFeatured->image) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover">
+                        <img src="{{ Storage::url($news->image) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover">
                         <div class="p-4 flex flex-col flex-grow">
                             <div class="flex items-center text-xs text-gray-500 mb-2">
-                                <span>{{ $news->category->name ?? 'Berita' }}</span>
+                                <span>{{ $news->categories->first()->name ?? 'Berita' }}</span>
                                 <span class="mx-1">•</span>
                                 <span>{{ $news->published_at->diffForHumans() }}</span>
                             </div>

@@ -23,7 +23,7 @@
                         <a href="{{ route('news.show', $news->slug) }}" class="block bg-white rounded-lg p-6 {{ !$loop->last ? 'mb-4' : '' }} hover:shadow-lg transition-shadow">
                             <div class="flex items-center mb-3">
                                 <div class="w-3 h-3 {{ $loop->first ? 'bg-news-red' : 'bg-green-500' }} rounded-full mr-2"></div>
-                                <span class="text-gray-600 text-sm">{{ $news->category->name ?? 'Berita' }}</span>
+                                <span class="text-gray-600 text-sm">{{ $news->categories->first()->name ?? 'Berita' }}</span>
                             </div>
                             <h3 class="text-gray-900 font-bold text-lg mb-2">{{ $news->title }}</h3>
                             <p class="text-gray-600 text-sm">{{ Str::limit($news->excerpt, 50) }}</p>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
                         <div class="flex items-center text-sm text-gray-500 mb-3">
-                            <span>{{ $mainFeatured->author->name ?? 'Penulis' }}</span>
+                            <span>{{ $mainFeatured->user->name ?? 'Penulis' }}</span>
                             <span class="mx-2">•</span>
                             <span>{{ $mainFeatured->published_at->diffForHumans() }}</span>
                         </div>
@@ -96,9 +96,9 @@
             <div class="space-y-6">
                 @forelse($sideNews as $news)
                 <a href="{{ route('news.show', $news->slug) }}" class="news-card bg-white rounded-xl shadow-lg overflow-hidden flex hover:shadow-xl transition-shadow">
-                    <img src="{{ Storage::url($mainFeatured->image) }}" alt="{{ $news->title }}" class="w-1/3 h-full object-cover">
+                    <img src="{{ Storage::url($news->image) }}" alt="{{ $news->title }}" class="w-1/3 h-full object-cover">
                     <div class="p-4 w-2/3">
-                        <span class="text-xs text-gemala-blue font-bold uppercase">{{ $news->category->name ?? 'Berita' }}</span>
+                        <span class="text-xs text-gemala-blue font-bold uppercase">{{ $news->categories->first()->name ?? 'Berita' }}</span>
                         <h3 class="font-bold text-gray-900 mt-1 hover:text-gemala-blue line-clamp-3">
                             {{ $news->title }}
                         </h3>
@@ -124,10 +124,10 @@
             @forelse($latestNews as $news)
             <a href="{{ route('news.show', $news->slug) }}" class="block news-card">
                 <article class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
-                    <img src="{{ Storage::url($mainFeatured->image) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover">
+                    <img src="{{ Storage::url($news->image) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover">
                     <div class="p-4 flex flex-col flex-grow">
                         <div class="flex items-center text-xs text-gray-500 mb-2">
-                            <span>{{ $news->category->name ?? 'Berita' }}</span>
+                            <span>{{ $news->categories->first()->name ?? 'Berita' }}</span>
                             <span class="mx-1">•</span>
                             <span>{{ $news->published_at->diffForHumans() }}</span>
                         </div>

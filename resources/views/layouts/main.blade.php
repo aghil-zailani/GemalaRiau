@@ -42,12 +42,6 @@
                             <span>Kategori</span>
                         </a>
                     </li>
-                    <!-- <li>
-                        <a href="{{ route('admin.authors.index') }}" class="flex items-center py-2 px-4 rounded-lg transition-colors {{ request()->routeIs('admin.authors.*') ? 'bg-slate-700' : 'hover:bg-slate-700' }}">
-                            <i class="bi bi-people mr-3"></i>
-                            <span>Penulis</span>
-                        </a>
-                    </li> -->
                 </ul>
             </nav>
 

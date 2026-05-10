@@ -17,7 +17,7 @@
         </div>
 
         <div class="mt-6">
-            {{ $posts->links() }}
+            {{ $posts->appends(['q' => $query])->links() }}
         </div>
     @else
         <p class="text-gray-500">Tidak ada artikel yang cocok dengan kata kunci ini.</p>

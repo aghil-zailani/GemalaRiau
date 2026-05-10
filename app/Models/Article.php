@@ -34,7 +34,7 @@ class Article extends Model
     // Relasi ke Author (User)
     public function author()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function user()
@@ -55,7 +55,9 @@ class Article extends Model
 
     public function scopeSearch($query, $keyword)
     {
-        return $query->where('title', 'like', "%{$keyword}%")
-                     ->orWhere('content', 'like', "%{$keyword}%");
+        return $query->where(function($q) use ($keyword) {
+            $q->where('title', 'like', "%{$keyword}%")
+              ->orWhere('content', 'like', "%{$keyword}%");
+        });
     }
 }

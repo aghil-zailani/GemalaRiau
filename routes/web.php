@@ -5,7 +5,6 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\Auth\LoginController;
 
 /*
@@ -26,7 +25,6 @@ Route::get('/search', [PageController::class, 'search'])->name('search');
 Route::post('/newsletter/subscribe', [PageController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::get('/news/{slug}', [PageController::class, 'show'])->name('news.show');
 Route::get('/categories', [PageController::class, 'categoriesIndex'])->name('categories.index');
-Route::get('/search', [PageController::class, 'search'])->name('search');
 
 // --- RUTE PANEL ADMIN ---
 Route::prefix('admin')
@@ -37,7 +35,6 @@ Route::prefix('admin')
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('articles', ArticleController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('authors', AuthorController::class);
     Route::patch('articles/{article}/toggle-status', [ArticleController::class, 'toggleStatus'])->name('articles.toggleStatus');
     Route::post('ckeditor/upload', [ArticleController::class, 'upload'])->name('ckeditor.upload');
 });

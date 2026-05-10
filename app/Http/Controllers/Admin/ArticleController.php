@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ArticleController extends Controller
 {
@@ -18,7 +19,7 @@ class ArticleController extends Controller
     {
         $articles = Article::with('categories', 'user')->latest()->paginate(10);
         $categories = Category::all();
-        return view('admin.articles.index', compact('articles', 'categories'));
+        return view('admin.articles.list', compact('articles', 'categories'));
     }
 
     /**
@@ -27,7 +28,7 @@ class ArticleController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.articles.create', compact('categories'));
+        return view('admin.articles.index', compact('categories'));
     }
 
     /**
@@ -90,7 +91,7 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         $categories = Category::all();
-        return view('admin.articles.create', compact('article', 'categories'));
+        return view('admin.articles.index', compact('article', 'categories'));
     }
 
     /**
@@ -142,9 +143,9 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        // Hapus gambar dari folder public
-        if ($article->image && File::exists(public_path($article->image))) {
-            File::delete(public_path($article->image));
+        // Hapus gambar dari storage
+        if ($article->image) {
+            Storage::disk('public')->delete($article->image);
         }
         
         $article->delete();
@@ -164,23 +165,25 @@ class ArticleController extends Controller
 
     public function upload(Request $request)
     {
+        $request->validate([
+            'upload' => 'required|file|mimes:jpeg,jpg,png,gif,webp|max:2048',
+        ]);
+
         if ($request->hasFile('upload')) {
             $file = $request->file('upload');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads'), $filename);
-
-            $url = asset('uploads/' . $filename);
+            $path = $file->store('uploads', 'public');
+            $url = Storage::url($path);
 
             return response()->json([
                 'uploaded' => 1,
-                'fileName' => $filename,
+                'fileName' => basename($path),
                 'url' => $url
             ]);
         }
 
         return response()->json([
             'uploaded' => 0,
-            'error' => ['message' => 'Upload failed']
+            'error' => ['message' => 'Upload gagal. Pastikan file adalah gambar (jpeg, png, gif, webp) dengan ukuran maksimal 2MB.']
         ]);
     }
 }
