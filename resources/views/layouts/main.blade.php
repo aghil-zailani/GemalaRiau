@@ -16,8 +16,13 @@
     @stack('styles')
 </head>
 <body class="bg-gray-100 font-sans">
-    <div id="app" class="flex h-screen">
-        <aside class="w-64 bg-slate-800 text-white flex-shrink-0 flex flex-col">
+    <div id="app" class="flex h-screen overflow-hidden">
+        
+        <!-- Mobile Sidebar Backdrop -->
+        <div id="sidebarBackdrop" class="fixed inset-0 bg-slate-900 bg-opacity-50 z-20 hidden lg:hidden transition-opacity"></div>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 bg-slate-800 text-white flex flex-col transition-transform duration-300 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto">
             <div class="h-16 flex items-center justify-center border-b border-slate-700">
                 <a href="{{ route('admin.dashboard') }}" class="text-xl font-bold">Gemala Admin</a>
             </div>
@@ -56,21 +61,49 @@
             </div>
         </aside>
 
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <header class="bg-white shadow-md h-16 flex items-center justify-between px-6">
-                <h1 class="text-2xl font-semibold text-gray-800">
-                    @yield('title')
-                </h1>
-                <div class="text-gray-600">
-                    <span>Selamat datang, {{ Auth::user()->name }}!</span>
+        <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4 sm:px-6 z-10">
+                <div class="flex items-center">
+                    <button id="mobileMenuBtn" class="text-gray-500 hover:text-gray-700 focus:outline-none lg:hidden mr-3">
+                        <i class="bi bi-list text-2xl"></i>
+                    </button>
+                    <h1 class="text-xl sm:text-2xl font-semibold text-gray-800 truncate">
+                        @yield('title')
+                    </h1>
+                </div>
+                <div class="text-gray-600 flex items-center gap-2 text-sm sm:text-base">
+                    <i class="bi bi-person-circle hidden sm:block text-xl"></i>
+                    <span class="truncate max-w-[120px] sm:max-w-none">{{ Auth::user()->name }}</span>
                 </div>
             </header>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-4 sm:p-6">
                 @yield('content')
             </main>
         </div>
     </div>
+
+    <!-- Scripts -->
+    <script>
+        // Sidebar Toggle Logic for Mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('-translate-x-full');
+                sidebarBackdrop.classList.toggle('hidden');
+            }
+
+            if (mobileMenuBtn && sidebar && sidebarBackdrop) {
+                mobileMenuBtn.addEventListener('click', toggleSidebar);
+                sidebarBackdrop.addEventListener('click', toggleSidebar);
+            }
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

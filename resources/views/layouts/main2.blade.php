@@ -196,7 +196,7 @@
                 </div>
             </div>
             <div class="border-t border-gray-800 mt-8 pt-8 text-center">
-                <p class="text-gray-400">&copy; {{ date('Y') }} <a href="https://www.linkedin.com/in/tengku-said-aghil-zailani" >T. Said Aghil Zailani</a> | Gemala Riau News. All rights reserved.</p>
+                <p class="text-gray-400">&copy; {{ date('Y') }} <a href="https://aghil-zailani.github.io/Portopolio/" >T. Said Aghil Zailani</a> | Gemala Riau News. All rights reserved.</p>
             </div>
         </div>
     </footer>

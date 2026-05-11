@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
@@ -45,8 +46,8 @@ class ArticleController extends Controller
             'image'        => 'nullable|image|max:2048',
             'images.*'     => 'image|max:2048',
             'captions'     => 'array',
-            'is_breaking'  => 'sometimes|accepted',
-            'is_featured'  => 'sometimes|accepted',
+            'is_breaking'  => 'nullable|boolean',
+            'is_featured'  => 'nullable|boolean',
             'status'       => 'in:draft,published',
             'published_at' => 'nullable|date',  
         ]);
@@ -107,7 +108,7 @@ class ArticleController extends Controller
             'published_at' => 'nullable|date',
             'categories'   => 'required|array',
             'categories.*' => 'exists:categories,id',
-            'image'        => 'nullable|image|max:2048',
+            'image'        => 'nullable|image|max:5120',
             'is_breaking'  => 'nullable|boolean',
             'is_featured'  => 'nullable|boolean',
         ]);
@@ -165,9 +166,22 @@ class ArticleController extends Controller
 
     public function upload(Request $request)
     {
-        $request->validate([
-            'upload' => 'required|file|mimes:jpeg,jpg,png,gif,webp|max:2048',
+        $validator = Validator::make($request->all(), [
+            'upload' => 'required|file|mimes:jpeg,jpg,png,gif,webp|max:5120',
+        ], [
+            'upload.max' => 'Ukuran gambar terlalu besar. Maksimal ukuran file adalah 5MB.',
+            'upload.mimes' => 'Format file tidak didukung. Harap unggah gambar dengan format: jpeg, png, gif, atau webp.',
+            'upload.required' => 'Tidak ada file gambar yang diunggah.'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'uploaded' => 0,
+                'error' => [
+                    'message' => $validator->errors()->first('upload')
+                ]
+            ]);
+        }
 
         if ($request->hasFile('upload')) {
             $file = $request->file('upload');
@@ -183,7 +197,7 @@ class ArticleController extends Controller
 
         return response()->json([
             'uploaded' => 0,
-            'error' => ['message' => 'Upload gagal. Pastikan file adalah gambar (jpeg, png, gif, webp) dengan ukuran maksimal 2MB.']
+            'error' => ['message' => 'Terjadi kesalahan sistem saat menyimpan gambar.']
         ]);
     }
 }

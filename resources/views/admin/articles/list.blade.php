@@ -3,10 +3,10 @@
 @section('title', 'Daftar Artikel')
 
 @section('content')
-<div class="bg-white p-6 rounded-lg shadow-md">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Daftar Semua Artikel</h2>
-        <a href="{{ route('admin.articles.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+<div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Daftar Semua Artikel</h2>
+        <a href="{{ route('admin.articles.create') }}" class="w-full sm:w-auto text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
             <i class="bi bi-plus-circle mr-1"></i> Tambah Artikel
         </a>
     </div>

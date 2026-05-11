@@ -177,21 +177,7 @@
         </div>
 
         {{-- ========== KOLOM KANAN: PANEL PENGATURAN ========== --}}
-        <div class="lg:col-span-1 space-y-5">
-
-            {{-- Tombol Aksi --}}
-            <div class="sidebar-card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100">
-                <button type="submit" name="status" value="{{ old('status', $article->status ?? 'draft') }}" 
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-                    <i class="bi bi-{{ isset($article) ? 'arrow-repeat' : 'cloud-arrow-up' }}"></i>
-                    {{ isset($article) ? 'Perbarui Artikel' : 'Simpan Artikel' }}
-                </button>
-                @if(isset($article))
-                <a href="{{ route('admin.articles.index') }}" class="w-full mt-2 inline-flex items-center justify-center bg-white hover:bg-gray-50 text-gray-600 font-medium py-2.5 px-4 rounded-xl border border-gray-200 transition-all gap-2">
-                    <i class="bi bi-arrow-left"></i> Kembali ke Daftar
-                </a>
-                @endif
-            </div>
+        <div class="lg:col-span-1 space-y-5">            
 
             {{-- Status & Jadwal --}}
             <div class="sidebar-card">
@@ -289,6 +275,20 @@
                 <button type="button" id="removeImageBtn" class="text-xs text-red-500 hover:text-red-700 mt-2 {{ isset($article) && $article->image ? '' : 'hidden' }}">
                     <i class="bi bi-x-circle mr-1"></i> Hapus preview
                 </button>
+            </div>
+
+            {{-- Tombol Aksi --}}
+            <div class="sidebar-card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100">
+                <button type="submit" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                    <i class="bi bi-{{ isset($article) ? 'arrow-repeat' : 'cloud-arrow-up' }}"></i>
+                    {{ isset($article) ? 'Perbarui Artikel' : 'Publish Artikel' }}
+                </button>
+                @if(isset($article))
+                <a href="{{ route('admin.articles.index') }}" class="w-full mt-2 inline-flex items-center justify-center bg-white hover:bg-gray-50 text-gray-600 font-medium py-2.5 px-4 rounded-xl border border-gray-200 transition-all gap-2">
+                    <i class="bi bi-arrow-left"></i> Kembali ke Daftar
+                </a>
+                @endif
             </div>
 
         </div>
