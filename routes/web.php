@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AdvertisementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,7 @@ Route::prefix('admin')
     Route::resource('categories', CategoryController::class);
     Route::patch('articles/{article}/toggle-status', [ArticleController::class, 'toggleStatus'])->name('articles.toggleStatus');
     Route::post('ckeditor/upload', [ArticleController::class, 'upload'])->name('ckeditor.upload');
+    Route::resource('advertisements', AdvertisementController::class);    
 });
 
 // --- RUTE HALAMAN PUBLIK (LANJUTAN) ---

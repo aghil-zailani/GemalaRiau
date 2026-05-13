@@ -3,6 +3,7 @@
 @section('title', 'Gemala Riau News - Berita Terkini Riau')
 
 @section('content')
+
 <!-- Hero Section -->
 <section class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,6 +38,15 @@
             </div>
         </div>
     </div>
+    @if(isset($globalAds['top_header']) && $globalAds['top_header']->count() > 0)
+        @php $adTop = $globalAds['top_header']->random(); @endphp
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 mb-2 text-center">
+            <span class="text-xs text-gray-400 block mb-1">Advertisement</span>
+            <a href="{{ $adTop->link_url }}" target="_blank" class="inline-block w-full">
+                <img src="{{ asset('storage/' . $adTop->image_path) }}" alt="{{ $adTop->title }}" class="mx-auto rounded-lg shadow-sm w-full max-h-32 object-cover">
+            </a>
+        </div>
+    @endif
 </section>
 
 <!-- Featured News Section -->
@@ -94,6 +104,15 @@
 
             <!-- Side Articles -->
             <div class="space-y-6">
+                @if(isset($globalAds['sidebar']) && $globalAds['sidebar']->count() > 0)
+                    @php $adSidebar = $globalAds['sidebar']->random(); @endphp
+                    <div class="bg-gray-50 rounded-xl p-2 text-center shadow-sm">
+                        <span class="text-[10px] text-gray-400 block mb-1 uppercase">Advertisement</span>
+                        <a href="{{ $adSidebar->link_url }}" target="_blank">
+                            <img src="{{ asset('storage/' . $adSidebar->image_path) }}" alt="{{ $adSidebar->title }}" class="w-full rounded object-cover">
+                        </a>
+                    </div>
+                @endif
                 @forelse($sideNews as $news)
                 <a href="{{ route('news.show', $news->slug) }}" class="news-card bg-white rounded-xl shadow-lg overflow-hidden flex hover:shadow-xl transition-shadow">
                     <img src="{{ Storage::url($news->image) }}" alt="{{ $news->title }}" class="w-1/3 h-full object-cover">

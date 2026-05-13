@@ -47,6 +47,12 @@
                             <span>Kategori</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.advertisements.index') }}" class="flex items-center py-2 px-4 rounded-lg transition-colors {{ request()->routeIs('admin.advertisements.*') ? 'bg-slate-700' : 'hover:bg-slate-700' }}">
+                            <i class="bi bi-tags mr-3"></i>
+                            <span>Iklan</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
 
