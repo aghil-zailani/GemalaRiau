@@ -11,6 +11,18 @@
         </button>
     </div>
 
+    <!-- Ringkasan Komisi -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white rounded-lg shadow p-4 border-l-4 border-blue-500">
+            <h3 class="text-gray-500 text-sm font-bold uppercase">Total Iklan Aktif</h3>
+            <p class="text-2xl font-bold text-gray-800">{{ $totalAdsActive ?? 0 }}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 border-l-4 border-green-500">
+            <h3 class="text-gray-500 text-sm font-bold uppercase">Total Estimasi Pendapatan (Fixed)</h3>
+            <p class="text-2xl font-bold text-gray-800">Rp {{ number_format($totalCommissionFixed ?? 0, 0, ',', '.') }}</p>
+        </div>
+    </div>
+
     <!-- Alert Sukses -->
     @if(session('success'))
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
@@ -43,6 +55,9 @@
                         Posisi
                     </th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Komisi & Kontrak
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Status
                     </th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -62,15 +77,30 @@
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p class="text-gray-900 whitespace-no-wrap font-bold">{{ $ad->title }}</p>
-                        <a href="{{ $ad->link_url }}" target="_blank" class="text-blue-500 hover:text-blue-800 text-xs truncate w-40 block" title="{{ $ad->link_url }}">
+                        @if($ad->advertiser_name)
+                            <p class="text-gray-600 text-xs mt-1">Klien: {{ $ad->advertiser_name }}</p>
+                        @endif
+                        <a href="{{ $ad->link_url }}" target="_blank" class="text-blue-500 hover:text-blue-800 text-xs truncate w-40 block mt-1" title="{{ $ad->link_url }}">
                             {{ $ad->link_url ?? 'Tidak ada link' }}
                         </a>
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <span class="relative inline-block px-3 py-1 font-semibold text-gray-900 leading-tight">
+                        <span class="relative inline-block px-3 py-1 font-semibold text-gray-900 leading-tight mb-1">
                             <span aria-hidden class="absolute inset-0 bg-gray-200 opacity-50 rounded-full"></span>
                             <span class="relative">{{ Str::title(str_replace('_', ' ', $ad->position)) }}</span>
                         </span>
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <p class="text-gray-900 font-bold">{{ $ad->formatted_commission }}</p>
+                        @if($ad->start_date || $ad->end_date)
+                            <p class="text-xs text-gray-500 mt-1">
+                                {{ $ad->start_date ? $ad->start_date->format('d M Y') : 'Mulai' }} - 
+                                {{ $ad->end_date ? $ad->end_date->format('d M Y') : 'Selesai' }}
+                            </p>
+                            @if(!$ad->isInContractPeriod())
+                                <span class="text-xs text-red-500 font-bold">Kontrak Habis</span>
+                            @endif
+                        @endif
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         @if($ad->is_active)
@@ -132,6 +162,12 @@
                                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" name="title" type="text" required placeholder="Contoh: Banner Promo Akhir Tahun">
                             </div>
 
+                            <!-- Nama Klien/Advertiser -->
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="advertiser_name">Nama Pengiklan / Klien</label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="advertiser_name" name="advertiser_name" type="text" placeholder="Contoh: PT. ABC">
+                            </div>
+
                             <!-- Gambar -->
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="image">Gambar Banner</label>
@@ -160,6 +196,42 @@
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                         <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <!-- Tipe Komisi -->
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="commission_type">Tipe Komisi</label>
+                                    <div class="relative">
+                                        <select class="block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="commission_type" name="commission_type">
+                                            <option value="fixed">Nominal (Rp)</option>
+                                            <option value="percentage">Persentase (%)</option>
+                                        </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Nominal Komisi -->
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="commission_amount">Nilai Komisi</label>
+                                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="commission_amount" name="commission_amount" type="number" step="0.01" min="0" placeholder="0">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <!-- Tanggal Mulai -->
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="start_date">Tanggal Mulai</label>
+                                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="start_date" name="start_date" type="date">
+                                </div>
+                                
+                                <!-- Tanggal Berakhir -->
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="end_date">Tanggal Berakhir</label>
+                                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="end_date" name="end_date" type="date">
                                 </div>
                             </div>
 

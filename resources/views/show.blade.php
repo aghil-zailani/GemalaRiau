@@ -10,6 +10,17 @@
 <meta property="og:url" content="{{ url()->current() }}">
 <meta property="og:type" content="article">
 <meta name="twitter:card" content="summary_large_image">
+<style>
+    /* Batasi ukuran gambar di dalam konten berita agar tidak terlalu besar */
+    article.prose img {
+        max-height: 450px !important;
+        width: auto !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        object-fit: contain !important;
+        border-radius: 0.5rem;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -35,8 +46,8 @@
         </header>
 
         <!-- Gambar Utama -->
-        <figure class="mb-8">
-            <img src="{{ Storage::url($article->image) }}" alt="{{ $article->title }}" class="w-full h-auto rounded-lg shadow-lg">
+        <figure class="mb-8 flex flex-col items-center">
+            <img src="{{ Storage::url($article->image) }}" alt="{{ $article->title }}" class="w-full max-w-3xl h-[300px] sm:h-[400px] object-cover rounded-lg shadow-lg">
             @if($article->image_caption)
                 <figcaption class="text-center text-sm text-gray-500 mt-2 italic">
                     {{ $article->image_caption }}

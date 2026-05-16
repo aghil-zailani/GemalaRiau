@@ -41,10 +41,23 @@
     @if(isset($globalAds['top_header']) && $globalAds['top_header']->count() > 0)
         @php $adTop = $globalAds['top_header']->random(); @endphp
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 mb-2 text-center">
-            <span class="text-xs text-gray-400 block mb-1">Advertisement</span>
-            <a href="{{ $adTop->link_url }}" target="_blank" class="inline-block w-full">
-                <img src="{{ asset('storage/' . $adTop->image_path) }}" alt="{{ $adTop->title }}" class="mx-auto rounded-lg shadow-sm w-full max-h-32 object-cover">
-            </a>
+            <span class="text-xs text-gray-400 block mb-1">
+                Advertisement
+                @if($adTop->advertiser_name)
+                    &bull; Sponsored by {{ $adTop->advertiser_name }}
+                @endif
+            </span>
+            <div class="relative group inline-block w-full">
+                <a href="{{ $adTop->link_url }}" target="_blank" class="block">
+                    <img src="{{ asset('storage/' . $adTop->image_path) }}" alt="{{ $adTop->title }}" class="mx-auto rounded-lg shadow-sm w-full max-h-32 object-cover">
+                </a>
+                @if($adTop->commission_amount > 0)
+                    <div class="absolute bottom-2 right-4 bg-black/70 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity flex items-center pointer-events-none">
+                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Mendukung Gemala Riau (Ad Placement)
+                    </div>
+                @endif
+            </div>
         </div>
     @endif
 </section>
@@ -106,11 +119,24 @@
             <div class="space-y-6">
                 @if(isset($globalAds['sidebar']) && $globalAds['sidebar']->count() > 0)
                     @php $adSidebar = $globalAds['sidebar']->random(); @endphp
-                    <div class="bg-gray-50 rounded-xl p-2 text-center shadow-sm">
-                        <span class="text-[10px] text-gray-400 block mb-1 uppercase">Advertisement</span>
-                        <a href="{{ $adSidebar->link_url }}" target="_blank">
-                            <img src="{{ asset('storage/' . $adSidebar->image_path) }}" alt="{{ $adSidebar->title }}" class="w-full rounded object-cover">
-                        </a>
+                    <div class="bg-gray-50 rounded-xl p-2 text-center shadow-sm relative group">
+                        <span class="text-[10px] text-gray-400 block mb-1 uppercase">
+                            Advertisement
+                            @if($adSidebar->advertiser_name)
+                                <br>Sponsored by {{ $adSidebar->advertiser_name }}
+                            @endif
+                        </span>
+                        <div class="relative">
+                            <a href="{{ $adSidebar->link_url }}" target="_blank" class="block">
+                                <img src="{{ asset('storage/' . $adSidebar->image_path) }}" alt="{{ $adSidebar->title }}" class="w-full rounded object-cover">
+                            </a>
+                            @if($adSidebar->commission_amount > 0)
+                                <div class="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity flex items-center pointer-events-none">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Ad Placement
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 @endif
                 @forelse($sideNews as $news)

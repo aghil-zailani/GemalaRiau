@@ -39,6 +39,8 @@
     .ck-editor__editable figure.image img {
         border-radius: 8px 8px 0 0 !important;
         max-width: 100% !important;
+        max-height: 400px !important;
+        object-fit: contain !important;
     }
     .ck.ck-editor {
         border-radius: 12px !important;
