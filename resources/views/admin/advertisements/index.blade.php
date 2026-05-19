@@ -71,7 +71,15 @@
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 w-32 h-auto">
-                                <img class="w-full h-full rounded shadow" src="{{ asset('storage/' . $ad->image_path) }}" alt="{{ $ad->title }}" />
+                                @php
+                                    $ext = strtolower(pathinfo($ad->image_path, PATHINFO_EXTENSION));
+                                    $isVid = in_array($ext, ['mp4', 'webm', 'ogg']);
+                                @endphp
+                                @if($isVid)
+                                    <video class="w-full h-full rounded shadow" src="{{ asset('storage/' . $ad->image_path) }}" muted loop autoplay playsinline></video>
+                                @else
+                                    <img class="w-full h-full rounded shadow" src="{{ asset('storage/' . $ad->image_path) }}" alt="{{ $ad->title }}" />
+                                @endif
                             </div>
                         </div>
                     </td>
@@ -171,8 +179,8 @@
                             <!-- Gambar -->
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="image">Gambar Banner</label>
-                                <input class="w-full py-2 px-3 text-gray-700 bg-white border border-gray-300 rounded focus:outline-none focus:border-blue-500" id="image" name="image" type="file" accept="image/*" required>
-                                <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, GIF, WebP (Maks: 2MB)</p>
+                                <input class="w-full py-2 px-3 text-gray-700 bg-white border border-gray-300 rounded focus:outline-none focus:border-blue-500" id="image" name="image" type="file" accept="image/*,video/mp4,video/webm,video/ogg" required>
+                                <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, GIF, WebP, MP4, WebM (Maks: 50MB)</p>
                             </div>
 
                             <!-- Link URL -->

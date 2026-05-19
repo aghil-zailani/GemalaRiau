@@ -76,10 +76,18 @@
             </button>
         </div>
 
+        <div class="mb-8">
+            <x-ad-placement position="article_top" />
+        </div>
+
         <!-- Isi Konten Berita -->
         <article class="prose prose-lg max-w-none text-gray-800 leading-relaxed">
             {!! $article->content !!}
         </article>
+
+        <div class="mt-8">
+            <x-ad-placement position="article_bottom" />
+        </div>
 
         <hr class="my-12 border-gray-200">
 

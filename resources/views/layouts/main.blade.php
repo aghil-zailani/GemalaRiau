@@ -12,6 +12,11 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
     
     <link rel="shortcut icon" href="{{ url('logo/gr1.png') }}" type="image/png">
+    
+    <!-- PWA Admin Manifest -->
+    <link rel="manifest" href="{{ asset('manifest-admin.json') }}">
+    <meta name="theme-color" content="#1e293b">
+    <link rel="apple-touch-icon" href="{{ url('logo/gr1.png') }}">
 
     @stack('styles')
 </head>
@@ -170,5 +175,18 @@
     </script>
     
     @stack('scripts')
+    
+    <!-- Service Worker Registration for PWA Admin -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw-admin.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
 </body>
 </html>

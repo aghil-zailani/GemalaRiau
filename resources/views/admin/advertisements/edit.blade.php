@@ -62,13 +62,21 @@
                     <div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="image">Gambar Banner Baru (Opsional)</label>
-                            <input class="w-full py-2 px-3 text-gray-700 bg-white border border-gray-300 rounded focus:outline-none focus:border-blue-500" id="image" name="image" type="file" accept="image/*">
-                            <p class="text-xs text-gray-500 mt-1 mb-2">Biarkan kosong jika tidak ingin mengubah gambar.</p>
+                            <input class="w-full py-2 px-3 text-gray-700 bg-white border border-gray-300 rounded focus:outline-none focus:border-blue-500" id="image" name="image" type="file" accept="image/*,video/mp4,video/webm,video/ogg">
+                            <p class="text-xs text-gray-500 mt-1 mb-2">Biarkan kosong jika tidak ingin mengubah media. Format: JPG, PNG, GIF, WebP, MP4, WebM (Maks: 50MB)</p>
                             
                             <!-- Preview Gambar Saat Ini -->
                             <div class="mt-2 border rounded p-2 bg-gray-50">
                                 <p class="text-xs text-gray-500 mb-1">Gambar saat ini:</p>
-                                <img src="{{ asset('storage/' . $advertisement->image_path) }}" alt="Current Banner" class="w-full h-auto max-h-32 object-contain rounded">
+                                @php
+                                    $ext = strtolower(pathinfo($advertisement->image_path, PATHINFO_EXTENSION));
+                                    $isVid = in_array($ext, ['mp4', 'webm', 'ogg']);
+                                @endphp
+                                @if($isVid)
+                                    <video src="{{ asset('storage/' . $advertisement->image_path) }}" class="w-full h-auto max-h-32 object-contain rounded" controls muted loop playsinline></video>
+                                @else
+                                    <img src="{{ asset('storage/' . $advertisement->image_path) }}" alt="Current Banner" class="w-full h-auto max-h-32 object-contain rounded">
+                                @endif
                             </div>
                         </div>
 

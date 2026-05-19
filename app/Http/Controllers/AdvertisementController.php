@@ -36,7 +36,7 @@ class AdvertisementController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'advertiser_name' => 'nullable|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
+            'image' => 'required|file|mimes:jpeg,png,jpg,gif,webp,mp4,webm,ogg|max:51200',
             'link_url' => 'nullable|url',
             'position' => 'required|in:top_header,home_middle,article_top,article_middle,article_bottom,sidebar',
             'commission_amount' => 'nullable|numeric|min:0',
@@ -76,7 +76,7 @@ class AdvertisementController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'advertiser_name' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp,mp4,webm,ogg|max:51200',
             'link_url' => 'nullable|url',
             'position' => 'required|in:top_header,home_middle,article_top,article_middle,article_bottom,sidebar',
             'commission_amount' => 'nullable|numeric|min:0',

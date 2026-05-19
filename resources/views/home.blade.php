@@ -38,28 +38,9 @@
             </div>
         </div>
     </div>
-    @if(isset($globalAds['top_header']) && $globalAds['top_header']->count() > 0)
-        @php $adTop = $globalAds['top_header']->random(); @endphp
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 mb-2 text-center">
-            <span class="text-xs text-gray-400 block mb-1">
-                Advertisement
-                @if($adTop->advertiser_name)
-                    &bull; Sponsored by {{ $adTop->advertiser_name }}
-                @endif
-            </span>
-            <div class="relative group inline-block w-full">
-                <a href="{{ $adTop->link_url }}" target="_blank" class="block">
-                    <img src="{{ asset('storage/' . $adTop->image_path) }}" alt="{{ $adTop->title }}" class="mx-auto rounded-lg shadow-sm w-full max-h-32 object-cover">
-                </a>
-                @if($adTop->commission_amount > 0)
-                    <div class="absolute bottom-2 right-4 bg-black/70 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity flex items-center pointer-events-none">
-                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Mendukung Gemala Riau (Ad Placement)
-                    </div>
-                @endif
-            </div>
-        </div>
-    @endif
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 mb-2">
+        <x-ad-placement position="top_header" />
+    </div>
 </section>
 
 <!-- Featured News Section -->
@@ -117,28 +98,7 @@
 
             <!-- Side Articles -->
             <div class="space-y-6">
-                @if(isset($globalAds['sidebar']) && $globalAds['sidebar']->count() > 0)
-                    @php $adSidebar = $globalAds['sidebar']->random(); @endphp
-                    <div class="bg-gray-50 rounded-xl p-2 text-center shadow-sm relative group">
-                        <span class="text-[10px] text-gray-400 block mb-1 uppercase">
-                            Advertisement
-                            @if($adSidebar->advertiser_name)
-                                <br>Sponsored by {{ $adSidebar->advertiser_name }}
-                            @endif
-                        </span>
-                        <div class="relative">
-                            <a href="{{ $adSidebar->link_url }}" target="_blank" class="block">
-                                <img src="{{ asset('storage/' . $adSidebar->image_path) }}" alt="{{ $adSidebar->title }}" class="w-full rounded object-cover">
-                            </a>
-                            @if($adSidebar->commission_amount > 0)
-                                <div class="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity flex items-center pointer-events-none">
-                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    Ad Placement
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                @endif
+                <x-ad-placement position="sidebar" />
                 @forelse($sideNews as $news)
                 <a href="{{ route('news.show', $news->slug) }}" class="news-card bg-white rounded-xl shadow-lg overflow-hidden flex hover:shadow-xl transition-shadow">
                     <img src="{{ Storage::url($news->image) }}" alt="{{ $news->title }}" class="w-1/3 h-full object-cover">
@@ -156,6 +116,11 @@
         </div>
     </div>
 </section>
+
+<!-- Home Middle Ad Placement -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <x-ad-placement position="home_middle" />
+</div>
 
 <!-- Latest News Section -->
 <section class="py-16 bg-gray-50">

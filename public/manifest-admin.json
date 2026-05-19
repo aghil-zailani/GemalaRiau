@@ -1,0 +1,17 @@
+{
+  "name": "Gemala Riau Admin",
+  "short_name": "Gemala Admin",
+  "description": "Panel Admin Gemala Riau News",
+  "start_url": "/admin/dashboard",
+  "scope": "/admin/",
+  "display": "standalone",
+  "background_color": "#1e293b",
+  "theme_color": "#1e293b",
+  "icons": [    
+    {
+      "src": "/logo/gr1_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
